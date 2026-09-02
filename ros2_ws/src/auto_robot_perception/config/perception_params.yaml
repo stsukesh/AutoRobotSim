@@ -1,0 +1,22 @@
+visual_detector_node:
+  ros__parameters:
+    use_sim_time: true
+    target_color: 'red'            # Options: 'red', 'blue', 'green', 'yellow'
+    min_contour_area: 350.0
+    target_real_height_m: 0.6
+    target_real_width_m: 0.3
+    camera_frame: 'camera_link_optical'
+
+visual_servoing_node:
+  ros__parameters:
+    use_sim_time: true
+    target_distance_m: 0.8         # Desired stand-off distance from target
+    kp_linear: 0.6
+    kd_linear: 0.08
+    kp_angular: 1.4
+    kd_angular: 0.12
+    max_linear_vel: 0.45
+    max_angular_vel: 0.85
+    safety_stop_distance_m: 0.35
+    search_spin_speed: 0.25
+    enable_search_mode: true

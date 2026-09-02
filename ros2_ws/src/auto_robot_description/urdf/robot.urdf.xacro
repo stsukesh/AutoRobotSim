@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="auto_robot">
+
+  <!-- Core robot chassis and wheels -->
+  <xacro:include filename="robot_core.xacro" />
+
+  <!-- Sensors -->
+  <xacro:include filename="lidar.xacro" />
+  <xacro:include filename="camera.xacro" />
+  <xacro:include filename="imu.xacro" />
+
+  <!-- Gazebo actuators and differential drive control -->
+  <xacro:include filename="gazebo_control.xacro" />
+
+</robot>

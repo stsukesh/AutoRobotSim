@@ -1,0 +1,26 @@
+# ROS 2 build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Python cache & virtualenvs
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS artifacts
+.DS_Store
+Thumbs.db
