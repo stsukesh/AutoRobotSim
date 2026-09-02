@@ -1,11 +1,12 @@
-FROM osrf/ros:humble-desktop-full
+FROM osrf/ros:jazzy-desktop-full
 
 # Avoid interactive prompts during apt install
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ROS_DISTRO=humble
+ENV ROS_DISTRO=jazzy
 ENV SHELL=/bin/bash
+ENV GZ_VERSION=harmonic
 
-# Install essential build tools, Gazebo classic, Nav2, SLAM Toolbox, robot_localization, OpenCV, and utilities
+# Install essential build tools, Gazebo Harmonic, Nav2, SLAM Toolbox, robot_localization, OpenCV, and utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
@@ -16,38 +17,39 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-vcstool \
     python3-argcomplete \
     \
-    # Gazebo Classic & ROS 2 integration
-    gazebo \
-    ros-humble-gazebo-ros-pkgs \
-    ros-humble-gazebo-plugins \
-    ros-humble-gazebo-msgs \
+    # Gazebo Harmonic & ROS 2 integration (modern Gazebo via ros_gz) \
+    ros-jazzy-ros-gz \
+    ros-jazzy-ros-gz-bridge \
+    ros-jazzy-ros-gz-sim \
+    ros-jazzy-ros-gz-image \
     \
-    # Robot State & Control
-    ros-humble-robot-state-publisher \
-    ros-humble-joint-state-publisher \
-    ros-humble-joint-state-publisher-gui \
-    ros-humble-xacro \
-    ros-humble-teleop-twist-keyboard \
+    # Robot State & Control \
+    ros-jazzy-robot-state-publisher \
+    ros-jazzy-joint-state-publisher \
+    ros-jazzy-joint-state-publisher-gui \
+    ros-jazzy-xacro \
+    ros-jazzy-teleop-twist-keyboard \
     \
-    # Sensor Fusion & Localization
-    ros-humble-robot-localization \
+    # Sensor Fusion & Localization \
+    ros-jazzy-robot-localization \
     \
-    # SLAM & Navigation 2
-    ros-humble-slam-toolbox \
-    ros-humble-navigation2 \
-    ros-humble-nav2-bringup \
-    ros-humble-nav2-simple-commander \
+    # SLAM & Navigation 2 \
+    ros-jazzy-slam-toolbox \
+    ros-jazzy-navigation2 \
+    ros-jazzy-nav2-bringup \
+    ros-jazzy-nav2-simple-commander \
+    ros-jazzy-nav2-mppi-controller \
     \
-    # Vision & Perception
-    ros-humble-cv-bridge \
-    ros-humble-image-transport \
-    ros-humble-image-transport-plugins \
+    # Vision & Perception \
+    ros-jazzy-cv-bridge \
+    ros-jazzy-image-transport \
+    ros-jazzy-image-transport-plugins \
     python3-opencv \
     python3-numpy \
     \
-    # Visualization & Tools
-    ros-humble-rviz2 \
-    ros-humble-rqt* \
+    # Visualization & Tools \
+    ros-jazzy-rviz2 \
+    ros-jazzy-rqt* \
     mesa-utils \
     libgl1-mesa-glx \
     libgl1-mesa-dri \
@@ -57,7 +59,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies for perception and testing
-RUN pip3 install --no-cache-dir \
+RUN pip3 install --no-cache-dir --break-system-packages \
     pytest \
     scipy \
     matplotlib \
@@ -77,7 +79,7 @@ RUN groupadd --gid $USER_GID $USERNAME 2>/dev/null || true \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup ROS environment in bashrc
-RUN echo "source /opt/ros/humble/setup.bash" >> /home/$USERNAME/.bashrc \
+RUN echo "source /opt/ros/jazzy/setup.bash" >> /home/$USERNAME/.bashrc \
     && echo "if [ -f /workspace/ros2_ws/install/setup.bash ]; then source /workspace/ros2_ws/install/setup.bash; fi" >> /home/$USERNAME/.bashrc
 
 # Set workspace directory

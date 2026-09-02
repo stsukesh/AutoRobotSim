@@ -68,12 +68,15 @@ $$\text{map} \xrightarrow[\text{SLAM / AMCL}]{} \text{odom} \xrightarrow[\text{r
 
 ## 3. Sensor Pipeline Specifications
 
-| Sensor Type | ROS 2 Topic | Message Type | Update Rate | Purpose |
-| :--- | :--- | :--- | :--- | :--- |
-| **2D LiDAR** | `/scan` | `sensor_msgs/msg/LaserScan` | 10 Hz | 360° obstacle avoidance, SLAM mapping, and AMCL particle localization |
-| **IMU** | `/imu/data` | `sensor_msgs/msg/Imu` | 50 Hz | High-rate angular velocity ($\omega_z$) and linear acceleration ($a_x, a_y$) for EKF fusion |
-| **Monocular Camera** | `/camera/image_raw` | `sensor_msgs/msg/Image` | 30 Hz | RGB image feed (640x480) for OpenCV color segmentation and visual servoing |
-| **Camera Info** | `/camera/camera_info` | `sensor_msgs/msg/CameraInfo` | 30 Hz | Intrinsic matrix ($f_x, f_y, c_x, c_y$) and distortion parameters |
-| **Wheel Odometry** | `/odom_raw` | `nav_msgs/msg/Odometry` | 50 Hz | Encoder-based differential drive displacement and velocities |
-| **Fused Odometry** | `/odometry/filtered` | `nav_msgs/msg/Odometry` | 30 Hz | State-estimated pose and twist from EKF filter |
-| **Vision Telemetry** | `/perception/target_bearing_distance` | `geometry_msgs/msg/Vector3` | 30 Hz | Estimated distance ($m$), bearing angle ($\text{rad}$), and contour area |
+| Sensor Type | Gazebo Topic | ROS 2 Topic (via ros_gz_bridge) | Message Type | Update Rate | Purpose |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **2D GPU LiDAR** | `/scan` | `/scan` | `sensor_msgs/msg/LaserScan` | 10 Hz | 360° obstacle avoidance, SLAM mapping, and AMCL particle localization |
+| **IMU** | `/imu/data` | `/imu/data` | `sensor_msgs/msg/Imu` | 50 Hz | High-rate angular velocity ($\omega_z$) and linear acceleration ($a_x, a_y$) for EKF fusion |
+| **Monocular Camera** | `/camera/image_raw` | `/camera/image_raw` | `sensor_msgs/msg/Image` | 30 Hz | RGB image feed (640x480) for OpenCV color segmentation and visual servoing |
+| **Camera Info** | `/camera/camera_info` | `/camera/camera_info` | `sensor_msgs/msg/CameraInfo` | 30 Hz | Intrinsic matrix ($f_x, f_y, c_x, c_y$) and distortion parameters |
+| **Wheel Odometry** | `/odom_raw` | `/odom_raw` | `nav_msgs/msg/Odometry` | 50 Hz | Encoder-based differential drive displacement and velocities |
+| **Fused Odometry** | — | `/odometry/filtered` | `nav_msgs/msg/Odometry` | 30 Hz | State-estimated pose and twist from EKF filter |
+| **Vision Telemetry** | — | `/perception/target_bearing_distance` | `geometry_msgs/msg/Vector3` | 30 Hz | Estimated distance ($m$), bearing angle ($\text{rad}$), and contour area |
+
+> [!IMPORTANT]
+> In Gazebo Harmonic, sensors publish to Gazebo Transport topics (not directly to ROS 2). The `ros_gz_bridge` (`parameter_bridge` node) translates these to ROS 2 DDS topics. This is configured in `spawn_robot.launch.py`.

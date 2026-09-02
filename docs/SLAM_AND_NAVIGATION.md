@@ -44,11 +44,12 @@ graph LR
 - Uses Dijkstra / $A^*$ wavefront expansion over the 2D global costmap.
 - Computes the shortest kinematically viable Euclidean path from current robot pose $(x_r, y_r)$ to target goal $(x_g, y_g)$.
 
-### 2.3 Local Controller (Dynamic Window Approach - DWB)
-- Evaluates hundreds of candidate velocity arcs $(v_x, \omega_z)$ within the robot's physical acceleration limits:
-  $$\Omega = \{ (v, \omega) \mid v \in [v_{\min}, v_{\max}], \, \omega \in [\omega_{\min}, \omega_{\max}], \, |v - v_k| \le a_x \Delta t, \, |\omega - \omega_k| \le a_\theta \Delta t \}$$
-- Selects the trajectory maximizing the weighted sum of trajectory critics:
-  $$\text{Score} = w_1 \cdot \text{PathDist} + w_2 \cdot \text{GoalDist} + w_3 \cdot \text{PathAlign} + w_4 \cdot \text{BaseObstacle} + w_5 \cdot \text{RotateToGoal}$$
+### 2.3 Local Controller (MPPI – Model Predictive Path Integral)
+- The **MPPI controller** is the default local trajectory planner in Nav2 for ROS 2 Jazzy and later, replacing the legacy DWB (Dynamic Window Approach). It achieves **45–50% better performance** via an Eigen-based computation backend.
+- Generates thousands of candidate trajectories (batch size: 2000) sampled from a noise distribution, then selects the optimal trajectory by weighting multiple critic functions:
+  $$\text{Optimal Trajectory} = \arg\min_{\tau} \sum_{k} w_k \cdot C_k(\tau)$$
+  where $C_k$ are configurable critics: `ConstraintCritic`, `CostCritic`, `GoalCritic`, `GoalAngleCritic`, `PathAlignCritic`, `PathFollowCritic`, `PathAngleCritic`, `PreferForwardCritic`.
+- Supports differential drive (`DiffDrive`), omnidirectional (`Omni`), and Ackermann motion models natively.
 
 ---
 

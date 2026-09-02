@@ -36,7 +36,9 @@ This guide is designed to help articulate the technical depth, architectural tra
 
 | Decision | Option Selected | Alternative Evaluated | Rationale |
 | :--- | :--- | :--- | :--- |
-| **SLAM Engine** | SLAM Toolbox (Async) | Cartographer / Gmapping | SLAM Toolbox natively integrates with ROS 2, features lifelong mapping, and runs efficient Ceres pose-graph optimization with lower CPU overhead. |
-| **Local Controller** | DWB (Dynamic Window Approach) | TEB / MPPI | DWB provides deterministic, low-latency velocity sampling well-suited for differential drive kinematics without excessive computational overhead. |
-| **Sensor Fusion** | 15-state EKF (`robot_localization`) | Custom Filter / Madgwick | Standard, highly configurable, industry-proven filter handling covariance tuning, frame transformations, and sensor dropouts gracefully. |
-| **Deployment** | Dockerized ROS 2 Container | Native Host Install | Ensures complete cross-platform reproducibility (Fedora, Ubuntu, macOS, Windows) with exact pinned dependencies, X11 GUI forwarding, and CI readiness. |
+| **ROS 2 Distribution** | Jazzy Jalisco (LTS, EOL 2029) | Humble (EOL 2027), Lyrical (2026) | Jazzy provides 5-year LTS support, is the recommended pairing for Gazebo Harmonic, and supports the latest Nav2 MPPI controller out of the box. |
+| **Simulator** | Gazebo Harmonic (LTS) + `ros_gz` bridge | Gazebo Classic (EOL 2025) | Gazebo Classic reached EOL in early 2025. Harmonic uses a modern rendering engine (Ogre2), native gz-sim system plugins, and the `ros_gz_bridge` architecture for clean ROS 2 ↔ Gazebo Transport separation. |
+| **SLAM Engine** | SLAM Toolbox v2.8+ (Async) | Cartographer / Gmapping | SLAM Toolbox natively integrates with ROS 2, features lifelong mapping, and runs efficient Ceres pose-graph optimization with lower CPU overhead. |
+| **Local Controller** | MPPI (Model Predictive Path Integral) | DWB (legacy) / TEB | MPPI is the default controller in Nav2 for Jazzy+, delivers 45–50% performance improvement over DWB via Eigen-based vectorization, and supports non-convex critic functions with sampling-based trajectory optimization. |
+| **Sensor Fusion** | 15-state EKF (`robot_localization` with Lifecycle Nodes) | Custom Filter / FusionCore / Madgwick | Standard, highly configurable, industry-proven filter with Lifecycle Node support for deterministic startup, handling covariance tuning, frame transformations, and sensor dropouts gracefully. |
+| **Deployment** | Dockerized ROS 2 Jazzy + Gazebo Harmonic Container | Native Host Install | Ensures complete cross-platform reproducibility (Fedora, Ubuntu, macOS, Windows) with exact pinned dependencies, X11 GUI forwarding, and CI readiness. |

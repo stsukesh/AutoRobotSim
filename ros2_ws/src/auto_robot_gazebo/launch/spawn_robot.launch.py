@@ -41,17 +41,40 @@ def generate_launch_description():
         }]
     )
 
-    # Spawn Entity Node
+    # Spawn Entity via ros_gz_sim (Gazebo Harmonic)
     spawn_entity = Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
+        package='ros_gz_sim',
+        executable='create',
         arguments=[
             '-topic', 'robot_description',
-            '-entity', 'auto_robot',
+            '-name', 'auto_robot',
             '-x', x_pos,
             '-y', y_pos,
             '-z', z_pos,
             '-Y', yaw
+        ],
+        output='screen'
+    )
+
+    # ros_gz_bridge: Bridge Gazebo Transport topics to ROS 2 DDS
+    gz_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            # Clock
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            # Differential Drive
+            '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',
+            '/odom_raw@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            # Joint States
+            '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
+            # LiDAR
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            # IMU
+            '/imu/data@sensor_msgs/msg/Imu[gz.msgs.IMU',
+            # Camera
+            '/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
         ],
         output='screen'
     )
@@ -66,5 +89,6 @@ def generate_launch_description():
 
         world_cmd,
         robot_state_publisher,
-        spawn_entity
+        spawn_entity,
+        gz_bridge
     ])

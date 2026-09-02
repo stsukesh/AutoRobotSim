@@ -1,13 +1,14 @@
 # Autonomous Robotics Simulation – ROS 2, Python, OpenCV, Gazebo
 
-[![ROS 2](https://img.shields.io/badge/ROS%202-Humble%20%7C%20Jazzy-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/humble/)
-[![Gazebo](https://img.shields.io/badge/Gazebo-Classic%2011-orange?logo=gazebo&logoColor=white)](https://gazebosim.org/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy%20Jalisco%20(LTS)-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/jazzy/)
+[![Gazebo](https://img.shields.io/badge/Gazebo-Harmonic%20(LTS)-orange?logo=gazebo&logoColor=white)](https://gazebosim.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x%20%2F%205.0-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
+[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Nav2](https://img.shields.io/badge/Nav2-MPPI%20Controller-blue)](https://nav2.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An end-to-end, production-grade autonomous mobile robotics simulation workflow built with **ROS 2**, **Gazebo**, **Python**, and **OpenCV**.
+An end-to-end, production-grade autonomous mobile robotics simulation workflow built with **ROS 2 Jazzy**, **Gazebo Harmonic**, **Python**, and **OpenCV**.
 
 ---
 
@@ -33,11 +34,11 @@ An end-to-end, production-grade autonomous mobile robotics simulation workflow b
 ## 🚀 Project Overview
 
 This repository implements the complete robotics software stack for an autonomous differential-drive robot:
-1. **Simulation Workflow**: Custom Gazebo world with indoor obstacle rooms, corridors, and colored visual landmarks.
-2. **Sensor Integration**: 2D LiDAR (360° scan), 6-DOF IMU, RGB Camera (640x480), and differential drive wheel encoders.
-3. **Sensor Fusion (EKF)**: Multi-sensor state estimation fusing wheel odometry and IMU via `robot_localization`, eliminating odometric drift by > 75%.
-4. **Computer Vision (OpenCV)**: Real-time HSV segmentation, contour moments, pinhole camera geometric distance/bearing estimation, and closed-loop visual servoing with LiDAR collision watchdog.
-5. **SLAM & Nav2 Autonomous Navigation**: Online asynchronous SLAM using `slam_toolbox` and full Navigation 2 stack (AMCL, layered costmaps, DWB local planner, NavFn global planner, behavior trees, and waypoint mission orchestrator).
+1. **Simulation Workflow**: Custom Gazebo Harmonic world with indoor obstacle rooms, corridors, and colored visual landmarks. Uses the modern `ros_gz` bridge architecture for ROS 2 ↔ Gazebo Transport topic bridging.
+2. **Sensor Integration**: 2D GPU LiDAR (360° scan), 6-DOF IMU, RGB Camera (640x480), and differential drive wheel encoders — all using native Gazebo Harmonic `gz-sim` system plugins.
+3. **Sensor Fusion (EKF)**: Multi-sensor state estimation fusing wheel odometry and IMU via `robot_localization` (with Lifecycle Node support), eliminating odometric drift by > 75%.
+4. **Computer Vision (OpenCV 4.x/5.0)**: Real-time HSV segmentation, contour moments, pinhole camera geometric distance/bearing estimation, and closed-loop visual servoing with LiDAR collision watchdog.
+5. **SLAM & Nav2 Autonomous Navigation**: Online asynchronous SLAM using `slam_toolbox` v2.8+ and full Navigation 2 stack (AMCL, layered costmaps, **MPPI local controller** (default in Jazzy, 45–50% faster than DWB via Eigen), NavFn global planner, behavior trees, and waypoint mission orchestrator).
 
 ---
 
@@ -120,7 +121,7 @@ xhost +local:root
 docker exec -it auto_robot_sim_container bash
 ```
 
-### Option B: Native Host (Ubuntu 22.04 with ROS 2 Humble)
+### Option B: Native Host (Ubuntu 24.04 with ROS 2 Jazzy + Gazebo Harmonic)
 ```bash
 # Clone and build workspace
 cd ros2_ws

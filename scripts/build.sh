@@ -10,8 +10,8 @@ echo "=========================================================="
 
 cd "$WORKSPACE_ROOT/ros2_ws"
 
-if [ -f "/opt/ros/humble/setup.bash" ]; then
-    source /opt/ros/humble/setup.bash
+if [ -f "/opt/ros/jazzy/setup.bash" ]; then
+    source /opt/ros/jazzy/setup.bash
 fi
 
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
